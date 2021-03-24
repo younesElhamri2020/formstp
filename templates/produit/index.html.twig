@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ProduitController!{% endblock %}
+
+{% block body %}
+
+
+    <div class="container">
+        <h1> La liste des produits</h1><hr>
+
+        <div class="my-3">
+            <a class="btn btn-left btn-success" href="{{ path('new')}}" role="button">Nouveau </a>
+        </div>
+
+
+        <table  class="table table-success table-striped">
+            <thead class="thead-dark">
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Prix</th>
+                <th>Created_at</th>
+                <th>Quantité</th>
+                <th>Category</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for produit in produits %}
+                <tr>
+                    <td style="width: 20%;"><img src="{{ asset('images/') }}{{produit.image}}" class="img-thumbnail" style="max-width: 40%;"></td>
+                    <td>{{ produit.name }}</td>
+                    <td>{{ produit.description }}</td>
+                    <td>{{ produit.prix }}</td>
+                    <td>{{ produit.getCreatedAt() | date}}</td>
+                    <td>{{ produit.quantite }}</td>
+                    <td>{{ produit.getCategory().getName()}}</td>
+
+                    <td>
+                        <a class="btn btn-primary" href="{{ path('produit.edit',{'id':produit.id})}}" role="button">Edit</a>
+                        <form action="{{ path('produit.delete',{'id':produit.id})}}" method="post">
+                            <input type="hidden" name="token" value="{{ csrf_token('delete-item') }}"/>
+                            <button class="btn btn-danger"     role="button">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+
+
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+{% endblock %}
